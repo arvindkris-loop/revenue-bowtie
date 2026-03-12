@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loop AI Revenue Bowtie · March 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #FFFFFF;
+      color: #1A1A2E;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #F8F9FC; }
+    ::-webkit-scrollbar-thumb { background: #D0D5DD; border-radius: 3px; }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .stage-card { transition: all 0.15s ease; }
+    .stage-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .knot-circle { transition: all 0.2s ease; }
+    .knot-circle:hover { transform: scale(1.06); }
+    .leakage-card { transition: all 0.15s ease; }
+    .leakage-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .view-btn { transition: all 0.12s ease; }
+    .view-btn:hover { background: #F0F4FF !important; }
+    .tab-btn { transition: all 0.12s ease; }
+    .tab-btn:hover { background: #F5F7FA !important; }
+
+    button { font-family: inherit; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ─── PALETTE ─────────────────────────────────────────── */
+const C = {
+  // Backgrounds
+  white:    "#FFFFFF",
+  bg:       "#F8F9FC",
+  card:     "#FFFFFF",
+  hover:    "#F5F7FA",
+
+  // Borders
+  border:   "#E5E7EB",
+  borderLt: "#F0F1F4",
+
+  // Text (CRM-style hierarchy)
+  text900:  "#101828",  // headings
+  text700:  "#344054",  // primary body
+  text500:  "#667085",  // secondary
+  text400:  "#98A2B3",  // muted / labels
+  text300:  "#D0D5DD",  // disabled
+
+  // Brand blue
+  blue700:  "#1D4ED8",
+  blue600:  "#2563EB",
+  blue500:  "#3B82F6",
+  blue400:  "#60A5FA",
+  blue100:  "#DBEAFE",
+  blue50:   "#EFF6FF",
+
+  // RAG
+  green600: "#059669",
+  green500: "#10B981",
+  green100: "#D1FAE5",
+  green50:  "#ECFDF5",
+
+  amber600: "#D97706",
+  amber500: "#F59E0B",
+  amber100: "#FEF3C7",
+  amber50:  "#FFFBEB",
+
+  red600:   "#DC2626",
+  red500:   "#EF4444",
+  red100:   "#FEE2E2",
+  red50:    "#FEF2F2",
+};
+
+/* ─── STAGE DATA ──────────────────────────────────────── */
+const stages = [
+  {
+    id: "awareness", side: "left", label: "Awareness", color: C.blue700,
+    tagline: "Top of funnel",
+    activities: ["3PD restaurant franchise network", "Inbound & outbound prospecting", "Brand presence in QSR vertical", "Competitor displacement (Voosh, Otter)"],
+    tools: ["Salesforce", "Marketing (not yet in scope)"],
+    owners: ["Sales team"],
+    metrics: ["MQLs", "SQLs", "Outbound response rate"],
+    gaps: ["Marketing function not yet built or in scope", "No defined ICP scoring in Salesforce"],
+  },
+  {
+    id: "education", side: "left", label: "Education", color: C.blue600,
+    tagline: "Show them the value",
+    activities: ["Platform demo (Base, Recover, Guard, TruROI+, Balance)", "Headroom analysis via #s-givemevalue", "TruROI+ business case & ROI deck", "Competitive comparison", "Value deck presentation"],
+    tools: ["Salesforce", "Google Slides", "Prasad/RevOps for headroom analysis"],
+    owners: ["AEs", "Sales Engineering"],
+    metrics: ["Demo-to-pilot rate", "Headroom analysis conversion rate"],
+    gaps: ["Headroom requests are reactive & fully manual — no self-serve", "No SPICED discovery framework formalized", "Value decks built ad hoc per rep"],
+  },
+  {
+    id: "selection", side: "left", label: "Selection", color: C.blue500,
+    tagline: "Close the deal",
+    activities: ["30/60-day pilot or bake-off", "Contract negotiation (Standard / Opt-Out)", "DocuSign contract signing", "Implementation fee collection", "Closed Won → #c-customers SF alert fires"],
+    tools: ["Salesforce", "DocuSign", "Zenskar", "Stripe"],
+    owners: ["AEs", "Sales leadership"],
+    metrics: ["Pilot-to-close rate", "ACV at close", "Days to signed contract"],
+    gaps: ["Products frequently missing from SF opp before close → broken handoff object", "Opt-out clock not systematically tracked from day 1", "Billing contact / POS / ERP fields often blank at close"],
+  },
+  {
+    id: "onboard", side: "right", label: "Onboard", color: C.blue500,
+    tagline: "Get them live",
+    activities: ["Handoff form review (CS receives from AE)", "Access provisioning: marketplace admin (DD/UE/GH), POS, bank", "Data ingestion setup (Product Support — Nathish/Rishi)", "Kickoff call (CS-led)", "Balance setup: GL mapping, QuickBooks/R365/Sage", "Module enablement per contract", "Customer platform access granted"],
+    tools: ["Vitally", "Salesforce", "Slack #support", "Google Sheets"],
+    owners: ["CSMs (Saif, Ozz, Bryan, Alexis, Simon)", "Product Support (Rishi, Nathish)"],
+    metrics: ["Days contract-to-kickoff", "Days to first data ingestion", "Access completion rate"],
+    gaps: ["10+ day access provisioning lag is chronic", "No SLA between close date and kickoff call", "POS dependencies (Toast, Aloha, Revel, R365) cause weeks-long stalls", "Onboarding status lives in Slack threads — not visible in Vitally or SF"],
+  },
+  {
+    id: "impact", side: "right", label: "Impact", color: C.blue600,
+    tagline: "Deliver the ROI",
+    activities: ["Daily QC checks before customer calls (Manigandan)", "TruROI+ campaign sessions (3–4 cadenced sessions)", "Weekly SOTU email delivery", "Balance journal entry validation", "Recover win-rate tracking", "Guard downtime restoration reporting", "Value reviews via #s-givemevalue decks", "Data triage escalations (#triage, #support)"],
+    tools: ["Vitally", "Salesforce", "Fireflies", "SOTU tracker (Streamlit)", "Campaign Ops tool"],
+    owners: ["CSMs", "Ops (Nikhil, Aashish)", "RevOps (Prasad)", "Data Engineering"],
+    metrics: ["SOTU delivery & open rate", "Campaign ROI (incremental sales $)", "Recover win rate", "Downtime % via Guard", "Customer call cadence adherence"],
+    gaps: ["Data freshness issues regularly surface right before customer calls", "Action items tracked in email — never surfaced on live calls (Alexis flagged)", "No formalized QBR cadence or health score review", "Value delivery is reactive, not proactively scheduled"],
+  },
+  {
+    id: "expansion", side: "right", label: "Expansion", color: C.blue700,
+    tagline: "Grow the account",
+    activities: ["New module upsell (TruROI+ → Balance → ReEngage → Guard)", "New location expansion alerts via #c-customers", "Franchise network referrals", "Price increases on renewals", "Testimonials & case studies", "Multi-brand rollouts (franchisee → franchisor)"],
+    tools: ["Salesforce", "DocuSign", "Zenskar", "#c-customers Slack bot"],
+    owners: ["CSMs (primary)", "AEs (commercial)", "Finance (Megha)"],
+    metrics: ["NRR", "GRR", "ARPL", "ARPU", "Expansion ACV", "Churn rate"],
+    gaps: ["Expansion billing not auto-triggered after onboarding completion → revenue leakage", "Churn risk not flagged until it becomes a formal escalation", "No structured referral or testimonial program", "Opt-out window churns not preventable without early warning system"],
+  },
+];
+
+const leakagePoints = [
+  {
+    from: "Selection", to: "Onboard", severity: "critical",
+    summary: "Broken handoff at the knot",
+    detail: "Salesforce Closed Won alert is the only formal handoff mechanism — and it routinely fires with incomplete data. Missing POS, ERP, billing fields. Products omitted from opp before close = broken onboarding object downstream.",
+    fixes: ["Require SF field completion before Closed Won stage", "Auto-generate handoff checklist on close", "Block DocuSign send until opp products are populated"],
+  },
+  {
+    from: "Onboard", to: "Impact", severity: "critical",
+    summary: "Dead time before value begins",
+    detail: "10+ day access provisioning lag is chronic. No SLA between contract signing and kickoff. POS dependency (Toast, Aloha, Revel, R365) causes weeks-long stalls. Customers sit idle after signing.",
+    fixes: ["Set 48-hr SLA for kickoff call post-close", "Build POS dependency tracker in Vitally", "Auto-assign CSM on Closed Won trigger"],
+  },
+  {
+    from: "Impact", to: "Expansion", severity: "high",
+    summary: "Revenue leaking at renewal",
+    detail: "Billing not auto-triggered after onboarding completion. Churn risk surfaces only at escalation, not in advance. Opt-out window clocks not tracked. No early warning on at-risk accounts.",
+    fixes: ["Auto-trigger billing start on onboarding complete", "Configure Vitally health score with churn signals", "Build opt-out countdown view per account"],
+  },
+];
+
+const kpiGrid = [
+  { label: "CAC",             stage: "Selection", side: "left",  status: "tracked", owner: "Finance"   },
+  { label: "ACV at Close",    stage: "Selection", side: "left",  status: "tracked", owner: "Sales Ops" },
+  { label: "Pilot-to-Close %",stage: "Selection", side: "left",  status: "tracked", owner: "Sales Ops" },
+  { label: "Time-to-Kickoff", stage: "Onboard",   side: "right", status: "missing", owner: "CS"        },
+  { label: "Time-to-Value",   stage: "Impact",    side: "right", status: "missing", owner: "CS"        },
+  { label: "Recover Win Rate",stage: "Impact",    side: "right", status: "tracked", owner: "Ops"       },
+  { label: "SOTU Delivery %", stage: "Impact",    side: "right", status: "partial", owner: "CS Ops"    },
+  { label: "GRR",             stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
+  { label: "NRR",             stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
+  { label: "ARPL / ARPU",     stage: "Expansion", side: "right", status: "partial", owner: "RevOps"    },
+  { label: "Churn Rate",      stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
+];
+
+const missingMetrics = [
+  "Health score (no Vitally scoring configured)",
+  "Opt-out window countdown per account",
+  "Onboarding completion % per stage",
+  "Days-to-billing-start after go-live",
+  "Expansion pipeline by CSM",
+  "Contracted vs. active location delta (chronic mismatch)",
+];
+
+const secondaryLeakage = [
+  { title: "Zombie Accounts",    desc: "Contracted but never activated — paying but not using. Visible in #c-customer-engagement re-engagement campaigns." },
+  { title: "Finance Single POC", desc: "Megha is the sole billing handler. Every billing start, credit, correction, churn = manual Slack ping to one person." },
+  { title: "Data Quality → Call Risk", desc: "Data freshness issues surface in #triage immediately before customer calls. No buffer. Creates credibility risk live." },
+  { title: "No Expansion Motion", desc: "Expansion is AE-driven and ad hoc — not a systematic CS-owned motion. NRR improvement requires fixing this." },
+];
+
+const TABS = ["Activities", "Tools", "Owners", "Metrics", "Gaps"];
+
+const RAG = {
+  tracked: { color: C.green600, bg: C.green50,  border: C.green100, label: "Tracked"     },
+  partial: { color: C.amber600, bg: C.amber50,  border: C.amber100, label: "Partial"     },
+  missing: { color: C.red600,   bg: C.red50,    border: C.red100,   label: "Not Tracked" },
+};
+
+const SEV = {
+  critical: { color: C.red600,   bg: C.red50,   border: C.red100,   label: "Critical" },
+  high:     { color: C.amber600, bg: C.amber50, border: C.amber100, label: "High"     },
+};
+
+/* ─── Chevron Arrow ────────────────────────────────────── */
+function ChevronArrow() {
+  return (
+    <svg width="20" height="28" viewBox="0 0 20 28" fill="none" style={{ flexShrink: 0, margin: "0 -1px" }}>
+      <path d="M2 2 L16 14 L2 26" stroke={C.text300} strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+/* ─── Bowtie widths — taper toward center ─────────────── */
+const BOWTIE_WIDTHS_LEFT  = [1.4, 1.05, 0.75];   // wide → narrow
+const BOWTIE_WIDTHS_RIGHT = [0.75, 1.05, 1.4];   // narrow → wide
+const CARD_HEIGHT = 190;
+
+/* ─── Stage Card (with header band) ──────────────────── */
+function StageCard({ stage, active, onClick, widthFlex }) {
+  return (
+    <div className="stage-card" onClick={onClick} style={{
+      flex: `${widthFlex} 1 0`,
+      cursor: "pointer",
+      background: active ? C.blue50 : C.white,
+      border: `1px solid ${active ? C.blue400 : C.border}`,
+      borderRadius: "8px",
+      height: `${CARD_HEIGHT}px`,
+      display: "flex", flexDirection: "column",
+      boxShadow: active ? `0 0 0 1px ${C.blue400}, 0 4px 12px rgba(37,99,235,0.12)` : "0 1px 3px rgba(0,0,0,0.06)",
+      position: "relative", overflow: "hidden",
+    }}>
+      {/* ── Header band ── */}
+      <div style={{
+        background: stage.color,
+        padding: "8px 10px",
+        textAlign: "center",
+        flexShrink: 0,
+      }}>
+        <div style={{ fontSize: "10px", fontWeight: "700", color: "#FFFFFF", letterSpacing: "0.08em", lineHeight: "1.2" }}>
+          {stage.label.toUpperCase()}
+        </div>
+        <div style={{ fontSize: "10px", fontWeight: "400", color: "rgba(255,255,255,0.8)", marginTop: "2px" }}>
+          {stage.tagline}
+        </div>
+      </div>
+
+      {/* ── Body ── */}
+      <div style={{ padding: "8px 10px", flex: 1, overflow: "hidden" }}>
+        <div style={{ fontSize: "11px", color: C.text500, lineHeight: "1.45" }}>
+          {stage.activities.slice(0, 2).map((a, i) => (
+            <div key={i} style={{ marginBottom: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              <span style={{ color: C.text300, marginRight: "4px" }}>·</span>{a}
+            </div>
+          ))}
+          {stage.activities.length > 2 && (
+            <div style={{ color: C.text400, fontSize: "10px", marginTop: "2px" }}>
+              +{stage.activities.length - 2} more
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── Gap badge — centered ── */}
+      <div style={{ padding: "6px 10px", display: "flex", justifyContent: "center", flexShrink: 0 }}>
+        <span style={{
+          fontSize: "10px", fontWeight: "600",
+          color: C.red600,
+          background: C.red50, border: `1px solid ${C.red100}`,
+          borderRadius: "10px", padding: "2px 10px",
+        }}>
+          {stage.gaps.length} gap{stage.gaps.length > 1 ? "s" : ""}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Detail Drawer ───────────────────────────────────── */
+function DetailDrawer({ stage, activeTab, setActiveTab }) {
+  const tabData = {
+    Activities: stage.activities,
+    Tools: stage.tools,
+    Owners: stage.owners,
+    Metrics: stage.metrics,
+    Gaps: stage.gaps,
+  };
+  const isGap = activeTab === "Gaps";
+
+  return (
+    <div style={{
+      marginTop: "16px", background: C.white,
+      border: `1px solid ${C.border}`, borderRadius: "8px",
+      padding: "20px", animation: "slideDown 0.15s ease",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px", flexWrap: "wrap", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <span style={{ fontSize: "13px", fontWeight: "600", color: stage.color }}>{stage.label}</span>
+          <span style={{ fontSize: "12px", color: C.text400 }}>— {stage.tagline}</span>
+        </div>
+        <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
+          {TABS.map(tab => (
+            <button key={tab} className="tab-btn" onClick={() => setActiveTab(tab)} style={{
+              padding: "5px 12px", borderRadius: "6px",
+              border: `1px solid ${activeTab === tab ? (tab === "Gaps" ? C.red100 : C.blue100) : C.border}`,
+              background: activeTab === tab ? (tab === "Gaps" ? C.red50 : C.blue50) : C.white,
+              color: activeTab === tab ? (tab === "Gaps" ? C.red600 : C.blue600) : C.text500,
+              fontSize: "12px", fontWeight: "500", cursor: "pointer",
+            }}>
+              {tab}
+              {tab === "Gaps" && (
+                <span style={{
+                  marginLeft: "4px", background: C.red500, color: "#fff",
+                  borderRadius: "4px", padding: "0 5px", fontSize: "10px", fontWeight: "600",
+                }}>{stage.gaps.length}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "6px" }}>
+        {(tabData[activeTab] || []).map((item, i) => (
+          <div key={i} style={{
+            padding: "10px 12px",
+            background: isGap ? C.red50 : C.bg,
+            borderLeft: `3px solid ${isGap ? C.red500 : stage.color}`,
+            borderRadius: "0 6px 6px 0",
+            fontSize: "12px", lineHeight: "1.5",
+            color: isGap ? C.red600 : C.text700,
+          }}>{item}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Knot Detail ─────────────────────────────────────── */
+function KnotDetail() {
+  const good = ["DocuSign contract executed", "#c-customers Salesforce alert fires", "Handoff form submitted by AE", "Implementation fee invoiced via Zenskar/Stripe"];
+  const bad  = ["SF opp products often missing before close", "POS / ERP / billing fields frequently blank", "No onboarding SLA auto-triggered on close", "Billing start requires manual Megha ping in #c-billing"];
+
+  return (
+    <div style={{
+      marginTop: "16px", background: C.white,
+      border: `1px solid ${C.border}`, borderRadius: "8px",
+      padding: "20px", animation: "slideDown 0.15s ease",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+    }}>
+      <div style={{ fontSize: "12px", fontWeight: "600", color: C.blue600, letterSpacing: "0.02em", marginBottom: "16px" }}>
+        Conversion Knot — The moment pre-sales becomes post-sales
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+        <div>
+          <div style={{ fontSize: "11px", fontWeight: "600", color: C.green600, marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.green500, display: "inline-block" }} />
+            What should fire here
+          </div>
+          {good.map((t, i) => (
+            <div key={i} style={{
+              padding: "8px 10px", marginBottom: "4px",
+              background: C.green50, borderLeft: `3px solid ${C.green500}`,
+              borderRadius: "0 6px 6px 0",
+              fontSize: "12px", color: C.text700,
+            }}>
+              <span style={{ color: C.green600, marginRight: "6px" }}>✓</span>{t}
+            </div>
+          ))}
+        </div>
+        <div>
+          <div style={{ fontSize: "11px", fontWeight: "600", color: C.red600, marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+            <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.red500, display: "inline-block" }} />
+            What actually breaks here
+          </div>
+          {bad.map((r, i) => (
+            <div key={i} style={{
+              padding: "8px 10px", marginBottom: "4px",
+              background: C.red50, borderLeft: `3px solid ${C.red500}`,
+              borderRadius: "0 6px 6px 0",
+              fontSize: "12px", color: C.text700,
+            }}>
+              <span style={{ color: C.red600, marginRight: "6px" }}>⚠</span>{r}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Bowtie View ─────────────────────────────────────── */
+function BowtieView() {
+  const [activeStage, setActiveStage] = useState(null);
+  const [activeTab, setActiveTab] = useState("Activities");
+  const leftStages  = stages.filter(s => s.side === "left");
+  const rightStages = stages.filter(s => s.side === "right");
+  const active = stages.find(s => s.id === activeStage);
+
+  const handleStage = (id) => {
+    if (activeStage === id) { setActiveStage(null); return; }
+    setActiveStage(id); setActiveTab("Activities");
+  };
+
+  return (
+    <div style={{ padding: "24px 24px 0" }}>
+
+      {/* ── Bowtie shape container ── */}
+      <div style={{ position: "relative", padding: "20px 0" }}>
+
+        {/* SVG bowtie silhouette behind cards */}
+        <svg viewBox="0 0 1200 200" preserveAspectRatio="none" style={{
+          position: "absolute", top: "10px", left: 0, right: 0,
+          width: "100%", height: `${CARD_HEIGHT + 20}px`,
+          zIndex: 0, pointerEvents: "none",
+        }}>
+          {/* Left triangle: wide on left, narrows to center */}
+          <polygon points="0,0 560,75 560,125 0,200" fill={C.blue50} stroke={C.blue100} strokeWidth="1" opacity="0.5"/>
+          {/* Right triangle: narrows at center, widens to right */}
+          <polygon points="640,75 1200,0 1200,200 640,125" fill={C.blue50} stroke={C.blue100} strokeWidth="1" opacity="0.5"/>
+          {/* Center diamond */}
+          <polygon points="560,75 600,60 640,75 600,140 560,125" fill={C.blue100} opacity="0.4"/>
+        </svg>
+
+        {/* Card row */}
+        <div style={{ display: "flex", alignItems: "center", position: "relative", zIndex: 1 }}>
+
+          {/* Left stages — tapering toward center */}
+          {leftStages.map((s, i) => (
+            <React.Fragment key={s.id}>
+              <StageCard stage={s} active={activeStage === s.id} onClick={() => handleStage(s.id)} widthFlex={BOWTIE_WIDTHS_LEFT[i]} />
+              <ChevronArrow />
+            </React.Fragment>
+          ))}
+
+          {/* Knot */}
+          <div className="knot-circle" onClick={() => handleStage("center")} style={{
+            flexShrink: 0,
+            width: "60px", height: "60px", borderRadius: "50%",
+            background: activeStage === "center"
+              ? `linear-gradient(135deg, ${C.blue500}, ${C.blue700})`
+              : `linear-gradient(135deg, ${C.blue600}, ${C.blue700})`,
+            boxShadow: activeStage === "center"
+              ? `0 0 0 4px ${C.blue100}, 0 4px 16px rgba(37,99,235,0.3)`
+              : `0 2px 10px rgba(37,99,235,0.25)`,
+            display: "flex", alignItems: "center", justifyContent: "center",
+            cursor: "pointer",
+            border: `3px solid ${C.white}`,
+            margin: "0 6px",
+          }}>
+            <div style={{ fontSize: "7px", fontWeight: "700", color: C.white, textAlign: "center", lineHeight: "1.3", letterSpacing: "0.04em" }}>
+              CLOSED<br/>WON
+            </div>
+          </div>
+
+          {/* Right stages — widening away from center */}
+          {rightStages.map((s, i) => (
+            <React.Fragment key={s.id}>
+              <ChevronArrow />
+              <StageCard stage={s} active={activeStage === s.id} onClick={() => handleStage(s.id)} widthFlex={BOWTIE_WIDTHS_RIGHT[i]} />
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+
+      {/* Axis labels */}
+      <div style={{ display: "flex", marginTop: "4px" }}>
+        <div style={{ flex: 1, textAlign: "center", fontSize: "10px", fontWeight: "600", color: C.blue600, letterSpacing: "0.05em" }}>
+          PRE-SALES
+        </div>
+        <div style={{ width: "80px" }} />
+        <div style={{ flex: 1, textAlign: "center", fontSize: "10px", fontWeight: "600", color: C.blue600, letterSpacing: "0.05em" }}>
+          POST-SALES
+        </div>
+      </div>
+
+      {/* Gap summary */}
+      <div style={{ marginTop: "12px", display: "flex", gap: "6px", flexWrap: "wrap", alignItems: "center" }}>
+        {stages.map(s => (
+          <button key={s.id} onClick={() => handleStage(s.id)} style={{
+            display: "flex", alignItems: "center", gap: "4px",
+            padding: "3px 10px", borderRadius: "16px",
+            background: activeStage === s.id ? C.blue50 : C.bg,
+            border: `1px solid ${activeStage === s.id ? C.blue400 : C.border}`,
+            cursor: "pointer", fontSize: "11px", fontWeight: "500", color: C.text700,
+          }}>
+            {s.label}
+            <span style={{
+              fontSize: "10px", fontWeight: "600",
+              background: C.red500, color: "#fff",
+              borderRadius: "8px", padding: "0 5px", minWidth: "16px", textAlign: "center",
+            }}>{s.gaps.length}</span>
+          </button>
+        ))}
+        <span style={{ fontSize: "11px", color: C.text400, marginLeft: "4px" }}>
+          Total: <span style={{ color: C.red600, fontWeight: "600" }}>{stages.reduce((a, s) => a + s.gaps.length, 0)} gaps</span>
+        </span>
+      </div>
+
+      {activeStage && activeStage !== "center" && active && (
+        <DetailDrawer stage={active} activeTab={activeTab} setActiveTab={setActiveTab} />
+      )}
+      {activeStage === "center" && <KnotDetail />}
+      <div style={{ height: "32px" }} />
+    </div>
+  );
+}
+
+/* ─── Leakage View ────────────────────────────────────── */
+function LeakageView() {
+  const [activeLeakage, setActiveLeakage] = useState(null);
+
+  return (
+    <div style={{ padding: "24px", animation: "fadeIn 0.15s ease" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+        <h2 style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>Systemic Leakage Points</h2>
+        <div style={{ display: "flex", gap: "12px", fontSize: "11px" }}>
+          {[
+            { color: C.red500,   label: "Critical" },
+            { color: C.amber500, label: "High" },
+            { color: C.green500, label: "Fix available" },
+          ].map(r => (
+            <span key={r.label} style={{ display: "flex", alignItems: "center", gap: "4px", color: C.text500 }}>
+              <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: r.color, display: "inline-block" }} />{r.label}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gap: "10px" }}>
+        {leakagePoints.map((lp, i) => {
+          const sev = SEV[lp.severity];
+          const isOpen = activeLeakage === i;
+          return (
+            <div key={i} className="leakage-card" onClick={() => setActiveLeakage(isOpen ? null : i)} style={{
+              background: C.white,
+              border: `1px solid ${isOpen ? sev.border : C.border}`,
+              borderLeft: `4px solid ${sev.color}`,
+              borderRadius: "8px", padding: "16px 20px", cursor: "pointer",
+              boxShadow: isOpen ? "0 2px 8px rgba(0,0,0,0.06)" : "0 1px 2px rgba(0,0,0,0.04)",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                  <span style={{
+                    padding: "2px 8px", borderRadius: "4px",
+                    background: sev.bg, border: `1px solid ${sev.border}`,
+                    color: sev.color, fontSize: "11px", fontWeight: "600",
+                  }}>{sev.label}</span>
+                  <span style={{ fontSize: "12px", color: C.text500 }}>
+                    {lp.from} <span style={{ color: C.text300 }}>→</span> {lp.to}
+                  </span>
+                </div>
+                <span style={{ fontSize: "18px", color: C.text400, lineHeight: "1" }}>{isOpen ? "−" : "+"}</span>
+              </div>
+              <div style={{ marginTop: "8px", fontSize: "14px", fontWeight: "500", color: C.text900 }}>{lp.summary}</div>
+
+              {isOpen && (
+                <div style={{ marginTop: "14px", animation: "slideDown 0.12s ease" }}>
+                  <div style={{
+                    padding: "12px", background: C.bg, borderRadius: "6px",
+                    border: `1px solid ${C.borderLt}`,
+                    fontSize: "12px", color: C.text500, lineHeight: "1.65", marginBottom: "12px",
+                  }}>{lp.detail}</div>
+                  <div style={{ fontSize: "11px", fontWeight: "600", color: C.green600, marginBottom: "8px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: C.green500, display: "inline-block" }} />
+                    Suggested fixes
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: "6px" }}>
+                    {lp.fixes.map((f, j) => (
+                      <div key={j} style={{
+                        padding: "8px 12px",
+                        background: C.green50, border: `1px solid ${C.green100}`,
+                        borderLeft: `3px solid ${C.green500}`,
+                        borderRadius: "0 6px 6px 0",
+                        fontSize: "12px", color: C.green600, lineHeight: "1.5",
+                      }}>→ {f}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ marginTop: "28px" }}>
+        <h3 style={{ fontSize: "13px", fontWeight: "600", color: C.text700, marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.amber500, display: "inline-block" }} />
+          Secondary Leakage Patterns
+        </h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "8px" }}>
+          {secondaryLeakage.map((item, i) => (
+            <div key={i} style={{
+              padding: "14px 16px",
+              background: C.amber50, border: `1px solid ${C.amber100}`,
+              borderLeft: `3px solid ${C.amber500}`,
+              borderRadius: "0 8px 8px 0",
+            }}>
+              <div style={{ fontSize: "12px", fontWeight: "600", color: C.amber600, marginBottom: "4px" }}>{item.title}</div>
+              <div style={{ fontSize: "12px", color: C.text500, lineHeight: "1.55" }}>{item.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ height: "32px" }} />
+    </div>
+  );
+}
+
+/* ─── Metrics View ────────────────────────────────────── */
+function MetricsView() {
+  const [filter, setFilter] = useState("all");
+  const filtered = filter === "all" ? kpiGrid : kpiGrid.filter(k => k.status === filter);
+
+  const filterBtns = [
+    { id: "all",     label: "All",         color: C.blue600, bg: C.blue50,  bd: C.blue100 },
+    { id: "tracked", label: "Tracked",     color: C.green600, bg: C.green50, bd: C.green100 },
+    { id: "partial", label: "Partial",     color: C.amber600, bg: C.amber50, bd: C.amber100 },
+    { id: "missing", label: "Not Tracked", color: C.red600,   bg: C.red50,   bd: C.red100 },
+  ];
+
+  return (
+    <div style={{ padding: "24px", animation: "fadeIn 0.15s ease" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
+        <h2 style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>KPI Grid — Metrics by Stage</h2>
+        <div style={{ display: "flex", gap: "4px" }}>
+          {filterBtns.map(f => (
+            <button key={f.id} onClick={() => setFilter(f.id)} style={{
+              padding: "5px 12px", borderRadius: "6px",
+              border: `1px solid ${filter === f.id ? f.bd : C.border}`,
+              background: filter === f.id ? f.bg : C.white,
+              color: filter === f.id ? f.color : C.text500,
+              fontSize: "12px", fontWeight: "500", cursor: "pointer",
+            }}>{f.label}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "8px" }}>
+        {filtered.map((kpi, i) => {
+          const rag = RAG[kpi.status];
+          return (
+            <div key={i} style={{
+              padding: "14px 16px",
+              background: C.white,
+              border: `1px solid ${C.border}`,
+              borderTop: `3px solid ${rag.color}`,
+              borderRadius: "8px",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
+                <span style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>{kpi.label}</span>
+                <span style={{
+                  fontSize: "10px", fontWeight: "600",
+                  color: rag.color, background: rag.bg,
+                  border: `1px solid ${rag.border}`,
+                  borderRadius: "4px", padding: "1px 6px",
+                }}>{rag.label}</span>
+              </div>
+              <div style={{ fontSize: "12px", color: C.blue600, fontWeight: "500", marginBottom: "2px" }}>{kpi.stage}</div>
+              <div style={{ fontSize: "11px", color: C.text400, marginBottom: "2px" }}>{kpi.side === "left" ? "Pre-sales" : "Post-sales"}</div>
+              <div style={{ fontSize: "11px", color: C.text500 }}>Owner: {kpi.owner}</div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style={{ marginTop: "28px" }}>
+        <h3 style={{ fontSize: "13px", fontWeight: "600", color: C.red600, marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.red500, display: "inline-block" }} />
+          Metrics Not Systematically Tracked
+        </h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "6px" }}>
+          {missingMetrics.map((m, i) => (
+            <div key={i} style={{
+              padding: "10px 12px",
+              background: C.red50, border: `1px solid ${C.red100}`,
+              borderLeft: `3px solid ${C.red500}`,
+              borderRadius: "0 6px 6px 0",
+              fontSize: "12px", color: C.red600,
+            }}>✕ {m}</div>
+          ))}
+        </div>
+      </div>
+      <div style={{ height: "32px" }} />
+    </div>
+  );
+}
+
+/* ─── App ─────────────────────────────────────────────── */
+function App() {
+  const [view, setView] = useState("bowtie");
+
+  const views = [
+    { id: "bowtie",  label: "Bowtie Map" },
+    { id: "leakage", label: "Leakage Points" },
+    { id: "metrics", label: "KPI Grid" },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: C.bg }}>
+
+      {/* Top bar */}
+      <div style={{
+        background: C.white, borderBottom: `1px solid ${C.border}`,
+        padding: "12px 24px",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        position: "sticky", top: 0, zIndex: 100,
+        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+      }}>
+        <div>
+          <div style={{ fontSize: "11px", fontWeight: "500", color: C.text400, marginBottom: "2px" }}>
+            Loop AI · GTM Reality Audit · March 2026
+          </div>
+          <div style={{ fontSize: "18px", fontWeight: "700", color: C.text900 }}>Loop AI Revenue Bowtie</div>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          {/* RAG legend */}
+          <div style={{ display: "flex", gap: "12px", borderRight: `1px solid ${C.border}`, paddingRight: "16px" }}>
+            {[
+              { color: C.green500, label: "Good" },
+              { color: C.amber500, label: "Warning" },
+              { color: C.red500,   label: "Critical" },
+            ].map(r => (
+              <span key={r.label} style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "11px", color: C.text500 }}>
+                <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: r.color, display: "inline-block" }} />{r.label}
+              </span>
+            ))}
+          </div>
+
+          {/* View tabs */}
+          <div style={{ display: "flex", gap: "4px", background: C.bg, padding: "3px", borderRadius: "8px", border: `1px solid ${C.borderLt}` }}>
+            {views.map(v => (
+              <button key={v.id} className="view-btn" onClick={() => setView(v.id)} style={{
+                padding: "6px 14px", borderRadius: "6px",
+                border: "none",
+                background: view === v.id ? C.white : "transparent",
+                color: view === v.id ? C.blue600 : C.text500,
+                fontSize: "12px", fontWeight: view === v.id ? "600" : "500",
+                cursor: "pointer",
+                boxShadow: view === v.id ? "0 1px 2px rgba(0,0,0,0.06)" : "none",
+              }}>{v.label}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {view === "bowtie"  && <BowtieView />}
+      {view === "leakage" && <LeakageView />}
+      {view === "metrics" && <MetricsView />}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
