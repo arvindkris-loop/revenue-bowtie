@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loop AI Revenue Bowtie · March 2026</title>
+  <title>Loop AI Revenue Bowtie · May 2026</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
@@ -174,26 +174,66 @@ const leakagePoints = [
 ];
 
 const kpiGrid = [
-  { label: "CAC",             stage: "Selection", side: "left",  status: "tracked", owner: "Finance"   },
-  { label: "ACV at Close",    stage: "Selection", side: "left",  status: "tracked", owner: "Sales Ops" },
-  { label: "Pilot-to-Close %",stage: "Selection", side: "left",  status: "tracked", owner: "Sales Ops" },
-  { label: "Time-to-Kickoff", stage: "Onboard",   side: "right", status: "missing", owner: "CS"        },
-  { label: "Time-to-Value",   stage: "Impact",    side: "right", status: "missing", owner: "CS"        },
-  { label: "Recover Win Rate",stage: "Impact",    side: "right", status: "tracked", owner: "Ops"       },
-  { label: "SOTU Delivery %", stage: "Impact",    side: "right", status: "partial", owner: "CS Ops"    },
-  { label: "GRR",             stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
-  { label: "NRR",             stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
-  { label: "ARPL / ARPU",     stage: "Expansion", side: "right", status: "partial", owner: "RevOps"    },
-  { label: "Churn Rate",      stage: "Expansion", side: "right", status: "tracked", owner: "Finance"   },
+  // ── AWARENESS ──
+  { label: "MQL Volume",           stage: "Awareness",  side: "left",  status: "missing", owner: "Marketing",  value: "—",  target: "TBD",  detail: "No marketing function built yet. Pipeline is 100% sales-driven." },
+  { label: "ICP Score Coverage",   stage: "Awareness",  side: "left",  status: "missing", owner: "Sales Ops",  value: "—",  target: "100%", detail: "No defined ICP scoring in Salesforce. Anand wants exhaustive KPI definitions." },
+
+  // ── EDUCATION ──
+  { label: "Demo-to-Pilot %",      stage: "Education",  side: "left",  status: "partial", owner: "Sales Ops",  value: "—",  target: "TBD",  detail: "Tracked ad hoc per rep, not systematized. Value decks built ad hoc." },
+  { label: "Headroom Conversion",  stage: "Education",  side: "left",  status: "partial", owner: "RevOps",     value: "—",  target: "TBD",  detail: "Reactive & manual. Anand: pull all headroom analyses since Jan 25 that didn't close." },
+
+  // ── SELECTION ──
+  { label: "CAC",                  stage: "Selection",  side: "left",  status: "tracked", owner: "Finance",    value: "—",  target: "TBD",  detail: "Tracked by Finance." },
+  { label: "ACV at Close",        stage: "Selection",  side: "left",  status: "tracked", owner: "Sales Ops",  value: "—",  target: "TBD",  detail: "Tracked in Salesforce. Anand wants breakdown by segment, product, and deal source." },
+  { label: "Win Rate",            stage: "Selection",  side: "left",  status: "tracked", owner: "Sales Ops",  value: "~50% SMB",  target: "50%+",  detail: "Anand called SMB 50% win rate a 'gold mine' (Mar 2026)." },
+  { label: "Sales Cycle Length",   stage: "Selection",  side: "left",  status: "partial", owner: "Sales Ops",  value: "—",  target: "TBD",  detail: "Anand wants this by segment + product + deal source in revenue model readout." },
+  { label: "Locations per Opp",    stage: "Selection",  side: "left",  status: "partial", owner: "Sales Ops",  value: "—",  target: "TBD",  detail: "Anand: 'leave out enterprise, focus on MM, tell me how locations per opp is looking.'" },
+  { label: "Quota Attainment",     stage: "Selection",  side: "left",  status: "tracked", owner: "Sales Ops",  value: "—",  target: "100%", detail: "Per-rep quarterly attainment tracked. Anand flags ramped reps missing targets." },
+
+  // ── SDR PIPELINE ──
+  { label: "SDR Pipeline ($)",     stage: "Selection",  side: "left",  status: "tracked", owner: "Sales Ops",  value: "—",  target: "$1.3M/mo", detail: "Anand: 'What is the total sets, holds, dials, leads needed for $1.3M SDR-driven pipeline?'" },
+  { label: "Dials-to-Holds",      stage: "Selection",  side: "left",  status: "tracked", owner: "SDR Mgmt",   value: "—",  target: "TBD",  detail: "Anand flagged drop-off: 'dials to holds dropped? why did we miss on 72/200 holds?'" },
+
+  // ── ONBOARD ──
+  { label: "Time-to-Kickoff",     stage: "Onboard",    side: "right", status: "partial", owner: "CS",         value: "~10 days avg", target: "48 hrs", detail: "Anand set 48-hr SLA target. Avg ~10 days. Outliers: Scott Family McD 50d, Galardi 47d, Beshay 41d." },
+  { label: "Time-to-Access",      stage: "Onboard",    side: "right", status: "partial", owner: "CS / Ops",   value: "10+ days",     target: "< 3 days", detail: "Anand P0: < 3 day onboarding post-access. Self-serve portal launched Apr 15." },
+  { label: "Onboarding Backlog",  stage: "Onboard",    side: "right", status: "tracked", owner: "CS Ops",     value: "40 Bal / 30 TR", target: "0", detail: "Anand flagged Mar 10: '40 onboardings behind on Balance, 30 on TruROI.' Active bottleneck." },
+  { label: "PFTL Rate",           stage: "Onboard",    side: "right", status: "partial", owner: "Engineering", value: "—",            target: "0%",  detail: "Product Failed to Go Live. Anand defined per-module: B=P&L delivered, T=report sent, T+=plan deployed, Re=review automated, P=CB+Guard+SOTU+DWT enabled." },
+  { label: "Pending Billing Setup", stage: "Onboard",  side: "right", status: "tracked", owner: "Finance",    value: "~44 entities", target: "0",  detail: "Zenskar: 44 contracts signed, not provisioned. Includes Sweetgreen (129 locs), TJF Topco (70), Lazy Dog (51), Maman (44), Angry Chickz (33)." },
+  { label: "Self-Serve Completion", stage: "Onboard",  side: "right", status: "partial", owner: "CS / Eng",   value: "11 of 16 in CS", target: "100%", detail: "Apr 15-May 4: 16 deals via self-serve. 5 Closed Won, 11 still in Contract Signed. 2 high-risk stalled." },
+
+  // ── IMPACT ──
+  { label: "Time-to-Value",       stage: "Impact",     side: "right", status: "missing", owner: "CS / Eng",   value: "Unknown",      target: "TBD", detail: "Anand P0: 'Time to value for the average customer is unknown.' Eng must own this." },
+  { label: "Recover Win Rate",    stage: "Impact",     side: "right", status: "tracked", owner: "Ops",        value: "—",            target: "TBD", detail: "Tracked by Ops. Recover active on 569 of 638 billing entities (89%)." },
+  { label: "SOTU Delivery %",     stage: "Impact",     side: "right", status: "partial", owner: "CS Ops",     value: "—",            target: "100%", detail: "Weekly SOTU email delivery. Open rates tracked but not systematized across all accounts." },
+  { label: "DAU / MAU",           stage: "Impact",     side: "right", status: "missing", owner: "Product",    value: "—",            target: "TBD", detail: "Anand P1: '96% hop away within 5s, load times 6s+.' 200 screens, most never visited." },
+  { label: "Agent Engagement",    stage: "Impact",     side: "right", status: "missing", owner: "Product",    value: "—",            target: "TBD", detail: "Anand: graph 'questions per day' for external customers across Don, Quant, Jamie, Sheets, Samantha, Overwatch — 90 day view." },
+  { label: "Product Success",     stage: "Impact",     side: "right", status: "partial", owner: "Engineering", value: "—",           target: "TBD", detail: "JE push success rate, restoration rate, failed campaign rate. Eng teams must 'proudly report & own' these." },
+
+  // ── EXPANSION ──
+  { label: "GRR (by Cohort)",     stage: "Expansion",  side: "right", status: "tracked", owner: "Finance",    value: "L3: 87.9% | L6: 82.1% | L9: 71.0% | L12: 67.7%", target: ">90% L12", detail: "SMB GRR by time cohort (Apr 2026). Anand: 'very low quality' revenue profile. Self-serve + engagement must turn the corner." },
+  { label: "NRR",                 stage: "Expansion",  side: "right", status: "tracked", owner: "Finance",    value: "—",            target: ">110%", detail: "Tracked. Improving requires systematic CS-owned expansion motion (currently ad hoc)." },
+  { label: "ARPL / ARPU",        stage: "Expansion",  side: "right", status: "partial", owner: "RevOps",     value: "—",            target: "TBD",  detail: "Partially tracked. Anand wants per-segment and per-product breakdown." },
+  { label: "Churn Rate",         stage: "Expansion",  side: "right", status: "tracked", owner: "Finance",    value: "—",            target: "<5% ann.", detail: "Tracked. Anand demanded full RCA for all churned/FTGL/opt-out since Jul 2025." },
+  { label: "Active Billing Entities", stage: "Expansion", side: "right", status: "tracked", owner: "Finance", value: "600 / 638",   target: "—",  detail: "Zenskar SOT: 600 active, 33 expired, 5 other. Segments: SMB 475, MM 151, Ent 12." },
+  { label: "Product Adoption",   stage: "Expansion",  side: "right", status: "tracked", owner: "RevOps",     value: "Rec 569 | Grd 470 | Bal 441",  target: "100% attach", detail: "Zenskar: Rec 569, Guard 470, Balance 441, ReEng 390, TruROI 343, TruROI+ 149. 13 entities with zero products." },
+  { label: "Contracted vs Active Locs", stage: "Expansion", side: "right", status: "partial", owner: "CS / Finance", value: "Chronic mismatch", target: "0 delta", detail: "No automated reconciliation between contracted and active locations. Manual Zenskar-Loop matching required." },
+  { label: "Opt-out Window",     stage: "Expansion",  side: "right", status: "missing", owner: "CS / Finance", value: "Not tracked", target: "30-day alert", detail: "Opt-out clocks not tracked from day 1. Churns not preventable without early warning system." },
+  { label: "Expansion Pipeline",  stage: "Expansion",  side: "right", status: "missing", owner: "CS / AEs",   value: "—",           target: "TBD",  detail: "No systematic expansion motion. CSMs don't own pipeline. NRR improvement requires fixing this." },
+  { label: "Contact Health",      stage: "Expansion",  side: "right", status: "missing", owner: "CS / Ops",   value: "Not tracked", target: "Weekly alerts", detail: "Anand: enrich CRM with signers/champions/users. Alert within 1 week when contacts depart. Find alternatives." },
 ];
 
 const missingMetrics = [
-  "Health score (no Vitally scoring configured)",
-  "Opt-out window countdown per account",
-  "Onboarding completion % per stage",
-  "Days-to-billing-start after go-live",
-  "Expansion pipeline by CSM",
-  "Contracted vs. active location delta (chronic mismatch)",
+  "Health score — no Vitally scoring configured; Anand wants 'sense of good health at one glimpse' guardrail dashboard",
+  "Opt-out window countdown — not tracked from day 1; churns not preventable without early warning",
+  "Time-to-Value per module — Anand: 'unknown for the average customer'; Eng must own",
+  "DAU / MAU + session data — '96% hop away within 5s'; 200 screens, most never visited",
+  "Agent engagement (questions/day) — Don, Quant, Jamie, Sheets, Samantha, Overwatch; 90-day external view",
+  "PFTL per module — Anand defined exact go-live criteria for B/T/T+/Re/P/DI; not systematically measured",
+  "Contact departure alerts — enriched CRM with departure monitoring + replacement identification",
+  "Expansion pipeline by CSM — expansion is ad hoc AE-driven, not CS-owned",
+  "Commission + marketing trends by platform — periods since 2024 with markups (requested Apr 2026)",
+  "Revenue gap vs model — should feed WBR sheet every Friday; gap reasons + updated expectations",
 ];
 
 const secondaryLeakage = [
@@ -624,19 +664,42 @@ function LeakageView() {
 /* ─── Metrics View ────────────────────────────────────── */
 function MetricsView() {
   const [filter, setFilter] = useState("all");
+  const [expandedKpi, setExpandedKpi] = useState(null);
+  const [groupBy, setGroupBy] = useState("stage"); // "stage" or "flat"
   const filtered = filter === "all" ? kpiGrid : kpiGrid.filter(k => k.status === filter);
 
+  const stageOrder = ["Awareness", "Education", "Selection", "Onboard", "Impact", "Expansion"];
+  const grouped = {};
+  filtered.forEach(k => {
+    if (!grouped[k.stage]) grouped[k.stage] = [];
+    grouped[k.stage].push(k);
+  });
+
+  const counts = { tracked: 0, partial: 0, missing: 0 };
+  kpiGrid.forEach(k => counts[k.status]++);
+
   const filterBtns = [
-    { id: "all",     label: "All",         color: C.blue600, bg: C.blue50,  bd: C.blue100 },
-    { id: "tracked", label: "Tracked",     color: C.green600, bg: C.green50, bd: C.green100 },
-    { id: "partial", label: "Partial",     color: C.amber600, bg: C.amber50, bd: C.amber100 },
-    { id: "missing", label: "Not Tracked", color: C.red600,   bg: C.red50,   bd: C.red100 },
+    { id: "all",     label: `All (${kpiGrid.length})`,     color: C.blue600, bg: C.blue50,  bd: C.blue100 },
+    { id: "tracked", label: `Tracked (${counts.tracked})`, color: C.green600, bg: C.green50, bd: C.green100 },
+    { id: "partial", label: `Partial (${counts.partial})`, color: C.amber600, bg: C.amber50, bd: C.amber100 },
+    { id: "missing", label: `Missing (${counts.missing})`, color: C.red600,   bg: C.red50,   bd: C.red100 },
   ];
+
+  const stageColors = {
+    Awareness: C.blue700, Education: C.blue600, Selection: C.blue500,
+    Onboard: C.blue500, Impact: C.blue600, Expansion: C.blue700,
+  };
 
   return (
     <div style={{ padding: "24px", animation: "fadeIn 0.15s ease" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", flexWrap: "wrap", gap: "10px" }}>
-        <h2 style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>KPI Grid — Metrics by Stage</h2>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px", flexWrap: "wrap", gap: "10px" }}>
+        <div>
+          <h2 style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>KPI Grid — Metrics by Stage</h2>
+          <div style={{ fontSize: "11px", color: C.text400, marginTop: "2px" }}>
+            {kpiGrid.length} KPIs tracked across {stageOrder.length} stages | Data sources: Zenskar, Salesforce, Slack
+          </div>
+        </div>
         <div style={{ display: "flex", gap: "4px" }}>
           {filterBtns.map(f => (
             <button key={f.id} onClick={() => setFilter(f.id)} style={{
@@ -650,49 +713,127 @@ function MetricsView() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "8px" }}>
-        {filtered.map((kpi, i) => {
-          const rag = RAG[kpi.status];
-          return (
-            <div key={i} style={{
-              padding: "14px 16px",
-              background: C.white,
-              border: `1px solid ${C.border}`,
-              borderTop: `3px solid ${rag.color}`,
-              borderRadius: "8px",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px" }}>
-                <span style={{ fontSize: "14px", fontWeight: "600", color: C.text900 }}>{kpi.label}</span>
-                <span style={{
-                  fontSize: "10px", fontWeight: "600",
-                  color: rag.color, background: rag.bg,
-                  border: `1px solid ${rag.border}`,
-                  borderRadius: "4px", padding: "1px 6px",
-                }}>{rag.label}</span>
-              </div>
-              <div style={{ fontSize: "12px", color: C.blue600, fontWeight: "500", marginBottom: "2px" }}>{kpi.stage}</div>
-              <div style={{ fontSize: "11px", color: C.text400, marginBottom: "2px" }}>{kpi.side === "left" ? "Pre-sales" : "Post-sales"}</div>
-              <div style={{ fontSize: "11px", color: C.text500 }}>Owner: {kpi.owner}</div>
-            </div>
-          );
-        })}
+      {/* Summary bar */}
+      <div style={{
+        display: "flex", gap: "12px", padding: "12px 16px", marginBottom: "20px",
+        background: C.white, border: `1px solid ${C.border}`, borderRadius: "8px",
+        boxShadow: "0 1px 2px rgba(0,0,0,0.04)", flexWrap: "wrap",
+      }}>
+        <div style={{ fontSize: "11px", color: C.text500, display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.green500 }} />
+          <strong style={{ color: C.green600 }}>{counts.tracked}</strong> Tracked
+        </div>
+        <div style={{ fontSize: "11px", color: C.text500, display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.amber500 }} />
+          <strong style={{ color: C.amber600 }}>{counts.partial}</strong> Partial
+        </div>
+        <div style={{ fontSize: "11px", color: C.text500, display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.red500 }} />
+          <strong style={{ color: C.red600 }}>{counts.missing}</strong> Missing
+        </div>
+        <div style={{ borderLeft: `1px solid ${C.border}`, paddingLeft: "12px", fontSize: "11px", color: C.text500 }}>
+          Key data: <strong style={{ color: C.text700 }}>600</strong> active billing entities |
+          <strong style={{ color: C.text700 }}> SMB 475</strong> / <strong style={{ color: C.text700 }}>MM 151</strong> / <strong style={{ color: C.text700 }}>Ent 12</strong> |
+          <strong style={{ color: C.red600 }}> L12 GRR 67.7%</strong>
+        </div>
       </div>
 
+      {/* Stage-grouped KPI cards */}
+      {stageOrder.map(stage => {
+        const items = grouped[stage];
+        if (!items || items.length === 0) return null;
+        const stageColor = stageColors[stage] || C.blue500;
+        const isRight = ["Onboard", "Impact", "Expansion"].includes(stage);
+        return (
+          <div key={stage} style={{ marginBottom: "20px" }}>
+            <div style={{
+              display: "flex", alignItems: "center", gap: "8px", marginBottom: "10px",
+              paddingBottom: "6px", borderBottom: `2px solid ${stageColor}`,
+            }}>
+              <span style={{
+                fontSize: "10px", fontWeight: "700", color: "#fff",
+                background: stageColor, borderRadius: "4px", padding: "2px 8px",
+                letterSpacing: "0.06em",
+              }}>{isRight ? "POST" : "PRE"}</span>
+              <span style={{ fontSize: "13px", fontWeight: "600", color: C.text900 }}>{stage}</span>
+              <span style={{ fontSize: "11px", color: C.text400 }}>({items.length} metrics)</span>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "8px" }}>
+              {items.map((kpi, i) => {
+                const rag = RAG[kpi.status];
+                const key = `${stage}-${i}`;
+                const isExpanded = expandedKpi === key;
+                return (
+                  <div key={i} onClick={() => setExpandedKpi(isExpanded ? null : key)} style={{
+                    padding: "14px 16px",
+                    background: C.white,
+                    border: `1px solid ${isExpanded ? rag.border : C.border}`,
+                    borderTop: `3px solid ${rag.color}`,
+                    borderRadius: "8px",
+                    boxShadow: isExpanded ? "0 2px 8px rgba(0,0,0,0.08)" : "0 1px 2px rgba(0,0,0,0.04)",
+                    cursor: "pointer",
+                    transition: "all 0.12s ease",
+                  }}>
+                    {/* Header row */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
+                      <span style={{ fontSize: "13px", fontWeight: "600", color: C.text900, flex: 1 }}>{kpi.label}</span>
+                      <span style={{
+                        fontSize: "10px", fontWeight: "600", flexShrink: 0,
+                        color: rag.color, background: rag.bg,
+                        border: `1px solid ${rag.border}`,
+                        borderRadius: "4px", padding: "1px 6px",
+                      }}>{rag.label}</span>
+                    </div>
+                    {/* Value + Target row */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
+                      <div>
+                        <div style={{ fontSize: "11px", color: C.text400, marginBottom: "1px" }}>Current</div>
+                        <div style={{ fontSize: "15px", fontWeight: "700", color: kpi.value === "—" || kpi.value === "Unknown" || kpi.value === "Not tracked" ? C.text300 : C.text900, lineHeight: "1.3" }}>
+                          {kpi.value}
+                        </div>
+                      </div>
+                      {kpi.target && kpi.target !== "—" && (
+                        <div style={{ textAlign: "right" }}>
+                          <div style={{ fontSize: "11px", color: C.text400, marginBottom: "1px" }}>Target</div>
+                          <div style={{ fontSize: "12px", fontWeight: "600", color: C.blue600 }}>{kpi.target}</div>
+                        </div>
+                      )}
+                    </div>
+                    {/* Owner */}
+                    <div style={{ fontSize: "11px", color: C.text500 }}>Owner: {kpi.owner}</div>
+                    {/* Expanded detail */}
+                    {isExpanded && kpi.detail && (
+                      <div style={{
+                        marginTop: "10px", paddingTop: "10px", borderTop: `1px solid ${C.borderLt}`,
+                        fontSize: "12px", color: C.text500, lineHeight: "1.6",
+                        animation: "slideDown 0.12s ease",
+                      }}>
+                        {kpi.detail}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Missing metrics */}
       <div style={{ marginTop: "28px" }}>
         <h3 style={{ fontSize: "13px", fontWeight: "600", color: C.red600, marginBottom: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
           <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: C.red500, display: "inline-block" }} />
-          Metrics Not Systematically Tracked
+          Anand's Priority Gaps — Metrics Not Systematically Tracked ({missingMetrics.length})
         </h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "6px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "6px" }}>
           {missingMetrics.map((m, i) => (
             <div key={i} style={{
               padding: "10px 12px",
               background: C.red50, border: `1px solid ${C.red100}`,
               borderLeft: `3px solid ${C.red500}`,
               borderRadius: "0 6px 6px 0",
-              fontSize: "12px", color: C.red600,
-            }}>✕ {m}</div>
+              fontSize: "12px", color: C.red600, lineHeight: "1.5",
+            }}>{m}</div>
           ))}
         </div>
       </div>
@@ -724,7 +865,7 @@ function App() {
       }}>
         <div>
           <div style={{ fontSize: "11px", fontWeight: "500", color: C.text400, marginBottom: "2px" }}>
-            Loop AI · GTM Reality Audit · March 2026
+            Loop AI · GTM Reality Audit · May 2026
           </div>
           <div style={{ fontSize: "18px", fontWeight: "700", color: C.text900 }}>Loop AI Revenue Bowtie</div>
         </div>
